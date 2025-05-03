@@ -1,0 +1,45 @@
+モデル名: r2plus1d
+パラメータ数: 80,343
+入力形状: (4, 3, 5, 120, 180)
+総演算量: 3.24 GFLOPs
+
+--- 演算量の詳細 ---
+| module                                  | #parameters or shape   | #flops    |
+|:----------------------------------------|:-----------------------|:----------|
+| model                                   | 80.343K                | 3.239G    |
+|  r2plus1d_block1                        |  2.064K                |  0.892G   |
+|   r2plus1d_block1.spatial_conv          |   0.432K               |   0.187G  |
+|    r2plus1d_block1.spatial_conv.weight  |    (16, 3, 1, 3, 3)    |           |
+|   r2plus1d_block1.spatial_bn            |   32                   |   13.824M |
+|    r2plus1d_block1.spatial_bn.weight    |    (16,)               |           |
+|    r2plus1d_block1.spatial_bn.bias      |    (16,)               |           |
+|   r2plus1d_block1.temporal_conv         |   1.536K               |   0.664G  |
+|    r2plus1d_block1.temporal_conv.weight |    (32, 16, 3, 1, 1)   |           |
+|   r2plus1d_block1.temporal_bn           |   64                   |   27.648M |
+|    r2plus1d_block1.temporal_bn.weight   |    (32,)               |           |
+|    r2plus1d_block1.temporal_bn.bias     |    (32,)               |           |
+|  r2plus1d_block2                        |  15.552K               |  1.68G    |
+|   r2plus1d_block2.spatial_conv          |   9.216K               |   0.995G  |
+|    r2plus1d_block2.spatial_conv.weight  |    (32, 32, 1, 3, 3)   |           |
+|   r2plus1d_block2.spatial_bn            |   64                   |   6.912M  |
+|    r2plus1d_block2.spatial_bn.weight    |    (32,)               |           |
+|    r2plus1d_block2.spatial_bn.bias      |    (32,)               |           |
+|   r2plus1d_block2.temporal_conv         |   6.144K               |   0.664G  |
+|    r2plus1d_block2.temporal_conv.weight |    (64, 32, 3, 1, 1)   |           |
+|   r2plus1d_block2.temporal_bn           |   0.128K               |   13.824M |
+|    r2plus1d_block2.temporal_bn.weight   |    (64,)               |           |
+|    r2plus1d_block2.temporal_bn.bias     |    (64,)               |           |
+|  r2plus1d_block3                        |  61.824K               |  0.668G   |
+|   r2plus1d_block3.spatial_conv          |   36.864K              |   0.398G  |
+|    r2plus1d_block3.spatial_conv.weight  |    (64, 64, 1, 3, 3)   |           |
+|   r2plus1d_block3.spatial_bn            |   0.128K               |   1.382M  |
+|    r2plus1d_block3.spatial_bn.weight    |    (64,)               |           |
+|    r2plus1d_block3.spatial_bn.bias      |    (64,)               |           |
+|   r2plus1d_block3.temporal_conv         |   24.576K              |   0.265G  |
+|    r2plus1d_block3.temporal_conv.weight |    (128, 64, 3, 1, 1)  |           |
+|   r2plus1d_block3.temporal_bn           |   0.256K               |   2.765M  |
+|    r2plus1d_block3.temporal_bn.weight   |    (128,)              |           |
+|    r2plus1d_block3.temporal_bn.bias     |    (128,)              |           |
+|  fc                                     |  0.903K                |  3.584K   |
+|   fc.weight                             |   (7, 128)             |           |
+|   fc.bias                               |   (7,)                 |           |

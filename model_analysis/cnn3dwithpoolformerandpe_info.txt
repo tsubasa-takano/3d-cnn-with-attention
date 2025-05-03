@@ -1,0 +1,44 @@
+モデル名: cnn3dwithpoolformerandpe
+パラメータ数: 582,087
+入力形状: (4, 3, 5, 120, 180)
+総演算量: 9.70 GFLOPs
+
+--- 演算量の詳細 ---
+| module                                   | #parameters or shape   | #flops     |
+|:-----------------------------------------|:-----------------------|:-----------|
+| model                                    | 0.582M                 | 9.699G     |
+|  conv1                                   |  2.624K                |  1.12G     |
+|   conv1.weight                           |   (32, 3, 3, 3, 3)     |            |
+|   conv1.bias                             |   (32,)                |            |
+|  bn1                                     |  64                    |  27.648M   |
+|   bn1.weight                             |   (32,)                |            |
+|   bn1.bias                               |   (32,)                |            |
+|  conv2                                   |  55.36K                |  5.972G    |
+|   conv2.weight                           |   (64, 32, 3, 3, 3)    |            |
+|   conv2.bias                             |   (64,)                |            |
+|  bn2                                     |  0.128K                |  13.824M   |
+|   bn2.weight                             |   (64,)                |            |
+|   bn2.bias                               |   (64,)                |            |
+|  conv3                                   |  0.221M                |  2.389G    |
+|   conv3.weight                           |   (128, 64, 3, 3, 3)   |            |
+|   conv3.bias                             |   (128,)               |            |
+|  bn3                                     |  0.256K                |  2.765M    |
+|   bn3.weight                             |   (128,)               |            |
+|   bn3.bias                               |   (128,)               |            |
+|  position_embedding                      |  0.169M                |            |
+|   position_embedding.position_embeddings |   (1, 128, 4, 15, 22)  |            |
+|  poolformer_block                        |  0.132M                |  0.175G    |
+|   poolformer_block.ls1                   |   (128, 1, 1, 1)       |            |
+|   poolformer_block.ls2                   |   (128, 1, 1, 1)       |            |
+|   poolformer_block.norm1                 |   0.256K               |   0.845M   |
+|    poolformer_block.norm1.weight         |    (128,)              |            |
+|    poolformer_block.norm1.bias           |    (128,)              |            |
+|   poolformer_block.norm2                 |   0.256K               |   0.845M   |
+|    poolformer_block.norm2.weight         |    (128,)              |            |
+|    poolformer_block.norm2.bias           |    (128,)              |            |
+|   poolformer_block.mlp                   |   0.132M               |   0.173G   |
+|    poolformer_block.mlp.fc1              |    66.048K             |    86.508M |
+|    poolformer_block.mlp.fc2              |    65.664K             |    86.508M |
+|  fc                                      |  0.903K                |  3.584K    |
+|   fc.weight                              |   (7, 128)             |            |
+|   fc.bias                                |   (7,)                 |            |

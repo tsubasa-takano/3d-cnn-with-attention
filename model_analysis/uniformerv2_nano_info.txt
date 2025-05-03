@@ -1,0 +1,34 @@
+モデル名: uniformerv2_nano
+パラメータ数: 51,943
+入力形状: (4, 3, 5, 120, 180)
+総演算量: 0.13 GFLOPs
+
+--- 演算量の詳細 ---
+| module                           | #parameters or shape   | #flops     |
+|:---------------------------------|:-----------------------|:-----------|
+| model                            | 51.943K                | 0.128G     |
+|  class_embedding                 |  (32,)                 |            |
+|  positional_embedding            |  (151, 32)             |            |
+|  conv1                           |  13.824K               |  41.472M   |
+|   conv1.weight                   |   (32, 3, 1, 12, 12)   |            |
+|  ln_pre                          |  64                    |  0.483M    |
+|   ln_pre.weight                  |   (32,)                |            |
+|   ln_pre.bias                    |   (32,)                |            |
+|  transformer                     |  33.191K               |  85.625M   |
+|   transformer.temporal_cls_token |   (1, 1, 32)           |            |
+|   transformer.balance            |   (32,)                |            |
+|   transformer.resblocks          |   25.408K              |   76.152M  |
+|    transformer.resblocks.0       |    12.704K             |    38.076M |
+|    transformer.resblocks.1       |    12.704K             |    38.076M |
+|   transformer.dpe.0              |   0.896K               |   2.592M   |
+|    transformer.dpe.0.weight      |    (32, 1, 3, 3, 3)    |            |
+|    transformer.dpe.0.bias        |    (32,)               |            |
+|   transformer.dec.0              |   6.528K               |   6.879M   |
+|    transformer.dec.0.attn        |    4.224K              |    4.096K  |
+|    transformer.dec.0.ln_1        |    64                  |    0.64K   |
+|    transformer.dec.0.mlp         |    2.112K              |    8.192K  |
+|    transformer.dec.0.ln_2        |    64                  |    0.64K   |
+|    transformer.dec.0.ln_3        |    64                  |    0.483M  |
+|   transformer.proj               |   0.295K               |   1.536K   |
+|    transformer.proj.0            |    64                  |    0.64K   |
+|    transformer.proj.2            |    0.231K              |    0.896K  |

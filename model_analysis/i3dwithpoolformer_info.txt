@@ -1,0 +1,68 @@
+モデル名: i3dwithpoolformer
+パラメータ数: 867,855
+入力形状: (4, 3, 5, 120, 180)
+総演算量: 6.74 GFLOPs
+
+--- 演算量の詳細 ---
+| module                           | #parameters or shape   | #flops     |
+|:---------------------------------|:-----------------------|:-----------|
+| model                            | 0.868M                 | 6.736G     |
+|  conv1                           |  32.96K                |  2.134G    |
+|   conv1.weight                   |   (32, 3, 7, 7, 7)     |            |
+|   conv1.bias                     |   (32,)                |            |
+|  bn1                             |  64                    |  4.147M    |
+|   bn1.weight                     |   (32,)                |            |
+|   bn1.bias                       |   (32,)                |            |
+|  inception1                      |  97.24K                |  1.048G    |
+|   inception1.branch1             |   1.12K                |   11.75M   |
+|    inception1.branch1.0          |    1.056K              |    11.059M |
+|    inception1.branch1.1          |    64                  |    0.691M  |
+|   inception1.branch2             |   84.816K              |   0.915G   |
+|    inception1.branch2.0          |    1.584K              |    16.589M |
+|    inception1.branch2.1          |    96                  |    1.037M  |
+|    inception1.branch2.3          |    83.008K             |    0.896G  |
+|    inception1.branch2.4          |    0.128K              |    1.382M  |
+|   inception1.branch3             |   10.744K              |   0.116G   |
+|    inception1.branch3.0          |    0.264K              |    2.765M  |
+|    inception1.branch3.1          |    16                  |    0.173M  |
+|    inception1.branch3.3          |    3.472K              |    37.325M |
+|    inception1.branch3.4          |    32                  |    0.346M  |
+|    inception1.branch3.6          |    6.928K              |    74.65M  |
+|    inception1.branch3.7          |    32                  |    0.346M  |
+|   inception1.branch4             |   0.56K                |   5.875M   |
+|    inception1.branch4.1          |    0.528K              |    5.53M   |
+|    inception1.branch4.2          |    32                  |    0.346M  |
+|  inception2                      |  0.272M                |  2.939G    |
+|   inception2.branch1             |   8.384K               |   89.856M  |
+|    inception2.branch1.0          |    8.256K              |    88.474M |
+|    inception2.branch1.1          |    0.128K              |    1.382M  |
+|   inception2.branch2             |   0.175M               |   1.884G   |
+|    inception2.branch2.0          |    8.256K              |    88.474M |
+|    inception2.branch2.1          |    0.128K              |    1.382M  |
+|    inception2.branch2.3          |    0.166M              |    1.792G  |
+|    inception2.branch2.4          |    0.192K              |    2.074M  |
+|   inception2.branch3             |   85.328K              |   0.92G    |
+|    inception2.branch3.0          |    2.064K              |    22.118M |
+|    inception2.branch3.1          |    32                  |    0.346M  |
+|    inception2.branch3.3          |    20.784K             |    0.224G  |
+|    inception2.branch3.4          |    96                  |    1.037M  |
+|    inception2.branch3.6          |    62.256K             |    0.672G  |
+|    inception2.branch3.7          |    96                  |    1.037M  |
+|   inception2.branch4             |   4.192K               |   44.928M  |
+|    inception2.branch4.1          |    4.128K              |    44.237M |
+|    inception2.branch4.2          |    64                  |    0.691M  |
+|  poolformer_block                |  0.463M                |  0.611G    |
+|   poolformer_block.ls1           |   (240, 1, 1, 1)       |            |
+|   poolformer_block.ls2           |   (240, 1, 1, 1)       |            |
+|   poolformer_block.norm1         |   0.48K                |   1.584M   |
+|    poolformer_block.norm1.weight |    (240,)              |            |
+|    poolformer_block.norm1.bias   |    (240,)              |            |
+|   poolformer_block.norm2         |   0.48K                |   1.584M   |
+|    poolformer_block.norm2.weight |    (240,)              |            |
+|    poolformer_block.norm2.bias   |    (240,)              |            |
+|   poolformer_block.mlp           |   0.462M               |   0.608G   |
+|    poolformer_block.mlp.fc1      |    0.231M              |    0.304G  |
+|    poolformer_block.mlp.fc2      |    0.231M              |    0.304G  |
+|  fc                              |  1.687K                |  6.72K     |
+|   fc.weight                      |   (7, 240)             |            |
+|   fc.bias                        |   (7,)                 |            |

@@ -1,0 +1,43 @@
+モデル名: cnn3dwithmobileattentionandpe
+パラメータ数: 597,959
+入力形状: (4, 3, 5, 120, 180)
+総演算量: 9.72 GFLOPs
+
+--- 演算量の詳細 ---
+| module                                   | #parameters or shape   | #flops    |
+|:-----------------------------------------|:-----------------------|:----------|
+| model                                    | 0.598M                 | 9.721G    |
+|  conv1                                   |  2.624K                |  1.12G    |
+|   conv1.weight                           |   (32, 3, 3, 3, 3)     |           |
+|   conv1.bias                             |   (32,)                |           |
+|  bn1                                     |  64                    |  27.648M  |
+|   bn1.weight                             |   (32,)                |           |
+|   bn1.bias                               |   (32,)                |           |
+|  conv2                                   |  55.36K                |  5.972G   |
+|   conv2.weight                           |   (64, 32, 3, 3, 3)    |           |
+|   conv2.bias                             |   (64,)                |           |
+|  bn2                                     |  0.128K                |  13.824M  |
+|   bn2.weight                             |   (64,)                |           |
+|   bn2.bias                               |   (64,)                |           |
+|  conv3                                   |  0.221M                |  2.389G   |
+|   conv3.weight                           |   (128, 64, 3, 3, 3)   |           |
+|   conv3.bias                             |   (128,)               |           |
+|  bn3                                     |  0.256K                |  2.765M   |
+|   bn3.weight                             |   (128,)               |           |
+|   bn3.bias                               |   (128,)               |           |
+|  position_embedding                      |  0.169M                |           |
+|   position_embedding.position_embeddings |   (1, 128, 4, 15, 22)  |           |
+|  attention_module                        |  0.148M                |  0.196G   |
+|   attention_module.layer_scale           |   (128, 1, 1, 1)       |           |
+|   attention_module.q                     |   66.048K              |   86.508M |
+|    attention_module.q.weight             |    (512, 128, 1, 1, 1) |           |
+|    attention_module.q.bias               |    (512,)              |           |
+|   attention_module.kv                    |   16.512K              |   21.627M |
+|    attention_module.kv.weight            |    (128, 128, 1, 1, 1) |           |
+|    attention_module.kv.bias              |    (128,)              |           |
+|   attention_module.proj                  |   65.664K              |   86.508M |
+|    attention_module.proj.weight          |    (128, 512, 1, 1, 1) |           |
+|    attention_module.proj.bias            |    (128,)              |           |
+|  fc                                      |  0.903K                |  3.584K   |
+|   fc.weight                              |   (7, 128)             |           |
+|   fc.bias                                |   (7,)                 |           |
