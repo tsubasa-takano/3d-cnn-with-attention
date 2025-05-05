@@ -45,7 +45,7 @@ def train():
         )
         model_class_name = "uniformerv2_tiny"
     else:
-        model = R2plus1d(in_channels=3, num_classes=NUM_CLASSES)
+        model = CNN3D(in_channels=3, num_classes=NUM_CLASSES)
         model_class_name = model.__class__.__name__.lower()
 
     # 損失関数とオプティマイザ
@@ -149,8 +149,8 @@ def train():
                           do_constant_folding=True,  # 定数畳み込みを許可
                           input_names=['input'],  # モデルの入力テンサルの名前
                           output_names=['output'],  # モデルの出力テンサルの名前
-                          # dynamic_axes={'input' : {0 : 'batch_size'},    # 可変長のバッチサイズをサポートする場合
-                          #               'output' : {0 : 'batch_size'}})
+                          dynamic_axes={'input' : {0 : 'batch_size'},    # 可変長のバッチサイズをサポートする場合
+                                        'output' : {0 : 'batch_size'}},
                           )
 
         print(f"モデルを {onnx_save_path} に保存しました。")
