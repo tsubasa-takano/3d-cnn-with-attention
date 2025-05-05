@@ -197,8 +197,7 @@ def main():
 
             plt.scatter(row['avg_inference_time'], y_value, s=100, alpha=0.7, marker=marker, color=color)
 
-            model_name_short = row['model_name']
-            plt.annotate(model_name_short + (' (ONNX)' if '.onnx' in row['model_name'] else ''),
+            plt.annotate(row['model_name'],
                         (row['avg_inference_time'], y_value),
                         xytext=(5, 5), textcoords='offset points')
 
