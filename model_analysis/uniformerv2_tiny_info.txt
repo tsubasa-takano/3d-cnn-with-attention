@@ -1,0 +1,33 @@
+モデル名: uniformerv2_tiny
+パラメータ数: 300,679
+入力形状: (4, 3, 5, 120, 180)
+総演算量: 0.75 GFLOPs
+
+--- 演算量の詳細 ---
+| module                           | #parameters or shape   | #flops     |
+|:---------------------------------|:-----------------------|:-----------|
+| model                            | 0.301M                 | 0.748G     |
+|  class_embedding                 |  (64,)                 |            |
+|  positional_embedding            |  (151, 64)             |            |
+|  conv1                           |  27.648K               |  82.944M   |
+|   conv1.weight                   |   (64, 3, 1, 12, 12)   |            |
+|  ln_pre                          |  0.128K                |  0.966M    |
+|   ln_pre.weight                  |   (64,)                |            |
+|   ln_pre.bias                    |   (64,)                |            |
+|  transformer                     |  0.263M                |  0.664G    |
+|   transformer.temporal_cls_token |   (1, 1, 64)           |            |
+|   transformer.balance            |   (64,)                |            |
+|   transformer.resblocks          |   0.2M                 |   0.601G   |
+|    transformer.resblocks.0       |    49.984K             |    0.15G   |
+|    transformer.resblocks.1       |    49.984K             |    0.15G   |
+|    transformer.resblocks.2       |    49.984K             |    0.15G   |
+|    transformer.resblocks.3       |    49.984K             |    0.15G   |
+|   transformer.dpe                |   3.584K               |   10.368M  |
+|    transformer.dpe.0             |    1.792K              |    5.184M  |
+|    transformer.dpe.1             |    1.792K              |    5.184M  |
+|   transformer.dec                |   58.944K              |   52.355M  |
+|    transformer.dec.0             |    29.472K             |    26.177M |
+|    transformer.dec.1             |    29.472K             |    26.177M |
+|   transformer.proj               |   0.583K               |   3.072K   |
+|    transformer.proj.0            |    0.128K              |    1.28K   |
+|    transformer.proj.2            |    0.455K              |    1.792K  |

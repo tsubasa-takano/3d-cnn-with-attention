@@ -119,13 +119,13 @@ IS_UNIFORMER = False  # UniformerV2を使用するかどうかのフラグ
 def train():
     # モデルのインスタンス化
     if IS_UNIFORMER:
-        model = uniformerv2_nano(
+        model = uniformerv2_tiny(
             t_size=INPUT_FRAMES,
             height=120,
             width=180,
             patch_size=12  # パッチサイズ12: 120/12=10, 180/12=15
         )
-        model_class_name = "uniformerv2_nano"
+        model_class_name = "uniformerv2_tiny"
     else:
         model = R2plus1d(in_channels=3, num_classes=NUM_CLASSES)
         model_class_name = model.__class__.__name__.lower()
@@ -227,7 +227,7 @@ def train():
                           dummy_input_for_trace,  # モデルの入力となるテンソル
                           onnx_save_path,  # モデルを保存するファイルパス
                           export_params=True,  # 学習済みパラメータをエクスポートファイルに含める
-                          opset_version=11,  # ONNX opset バージョン (適宜変更)
+                          opset_version=20,  # ONNX opset バージョン (適宜変更)
                           do_constant_folding=True,  # 定数畳み込みを許可
                           input_names=['input'],  # モデルの入力テンサルの名前
                           output_names=['output'],  # モデルの出力テンサルの名前
