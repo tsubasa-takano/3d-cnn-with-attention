@@ -24,6 +24,7 @@ from model import (
 )
 from uniformerv2_model import uniformerv2_tiny, uniformerv2_nano
 
+
 # --- モデル情報の出力機能 ---
 @logger.catch
 def print_model_info(model, input_shape, model_class_name):
@@ -104,20 +105,6 @@ def generate_dummy_data(batch_size, num_frames, height, width, num_classes):
 
     return dummy_input, dummy_labels
 
-def quantize_model(model):
-    """モデルを量子化 (int8)"""
-    try:
-        # GPUモデルをCPUに移動（量子化はCPUでのみ実行可能）
-        model = model.cpu()
-        quantized_model = torch.quantization.quantize_dynamic(
-            model,
-            {torch.nn.Linear, torch.nn.Conv3d},
-            dtype=torch.qint8
-        )
-        return quantized_model
-    except Exception as e:
-        raise Exception(f"An error occurred during model quantization: {str(e)}")
-
 
 # モデルのパラメータ設定
 INPUT_FRAMES = 5
@@ -127,7 +114,6 @@ NUM_CLASSES = 7
 BATCH_SIZE = 4  # 学習可能なように小さいバッチサイズに設定
 NUM_EPOCHS = 10  # テスト用にエポック数を少なく設定
 IS_UNIFORMER = False  # UniformerV2を使用するかどうかのフラグ
-
 
 
 def train():
@@ -231,7 +217,6 @@ def train():
     except Exception as e:
         print(f"保存したモデルのロードまたはテスト中にエラーが発生しました: {e}")
 
-
     # --- モデルをONNX形式で保存 ---
     print("--- モデルをONNX形式でエクスポート中 ---")
     try:
@@ -259,29 +244,6 @@ def train():
         print("モデルにONNXエクスポートに対応していない演算が含まれている可能性があります。")
         print("または、ONNX opsetバージョンが適切でない可能性があります。")
         print("詳細については、PyTorchのONNXエクスポートのドキュメントを参照してください。")
-
-
-
-    # 量子化されたモデルで推論
-    quantized_model = quantize_model(model)
-
-    try:
-        cpu_dummy_input = dummy_input_for_trace.cpu()
-
-        quantized_model.eval()  # モデルを評価モードにすることで、トレーニング特有の演算（例: dropout）を無効化
-        # モデルをTorchScript形式でトレース
-        print("--- モデルをTorchScriptでトレース中 ---")
-        traced_model = torch.jit.trace(quantized_model, cpu_dummy_input)
-        print("--- トレース完了 ---")
-
-        # TorchScriptモデルをファイルに保存
-        save_path = f"models/{model_class_name}_int8.pt"
-        traced_model.save(save_path)
-        print(f"量子化モデルを {save_path} に保存しました。")
-
-    except Exception as e:
-        print(f"量子化モデルのトレースまたは保存中にエラーが発生しました: {e}")
-        print("詳細については、PyTorchのTorchScriptのドキュメントを参照してください。")
 
 
 if __name__ == "__main__":
