@@ -1,4 +1,4 @@
-モデル名: R2plus1dWithPoolFormerAndPE
+モデル名: r2plus1dwithpoolformerandpe
 パラメータ数: 381,783
 入力形状: (4, 3, 5, 120, 180)
 総演算量: 3.41 GFLOPs
