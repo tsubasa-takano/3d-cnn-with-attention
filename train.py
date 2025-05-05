@@ -154,7 +154,6 @@ def train():
                           )
 
         print(f"モデルを {onnx_save_path} に保存しました。")
-
         print("--- ONNXエクスポート完了 ---")
 
     except Exception as e:
@@ -162,7 +161,6 @@ def train():
         print("モデルにONNXエクスポートに対応していない演算が含まれている可能性があります。")
         print("または、ONNX opsetバージョンが適切でない可能性があります。")
         print("詳細については、PyTorchのONNXエクスポートのドキュメントを参照してください。")
-
 
 # --- モデル情報の出力機能 ---
 @logger.catch
