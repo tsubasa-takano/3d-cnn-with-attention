@@ -24,88 +24,6 @@ from model import (
 )
 from uniformerv2_model import uniformerv2_tiny, uniformerv2_nano
 
-
-# --- モデル情報の出力機能 ---
-@logger.catch
-def print_model_info(model, input_shape, model_class_name):
-    """
-    モデルのパラメータ数とFLOPsを計算して表示する関数
-
-    Args:
-        model: 分析するモデル
-        input_shape: 入力テンソルの形状 (batch_size, channels, frames, height, width)
-    """
-    # パラメータ数を計算
-    param_count = sum(p.numel() for p in model.parameters())
-    print(f"モデルパラメータ数: {param_count:,}")
-
-    # 演算量(FLOPs)を計算
-    dummy_input = torch.rand(input_shape)
-    dummy_input = dummy_input.to(next(model.parameters()).device)
-
-    try:
-        flops = FlopCountAnalysis(model, dummy_input)
-        flops_table = flop_count_table(flops)
-        total_flops = flops.total()
-
-        print("--- モデル演算量(FLOPs)の詳細 ---")
-        print(flops_table)
-        print(f"総演算量: {total_flops / 1e9:.2f} GFLOPs")
-
-        # 結果をファイルに保存
-        os.makedirs("model_analysis", exist_ok=True)
-        with open(f"model_analysis/{model_class_name}_info.txt", "w") as f:
-            f.write(f"モデル名: {model_class_name}\n")
-            f.write(f"パラメータ数: {param_count:,}\n")
-            f.write(f"入力形状: {input_shape}\n")
-            f.write(f"総演算量: {total_flops / 1e9:.2f} GFLOPs\n\n")
-            f.write("--- 演算量の詳細 ---\n")
-            f.write(flops_table)
-
-        print(f"モデル情報を model_analysis/{model_class_name}_info.txt に保存しました")
-
-        return {
-            "param_count": param_count,
-            "total_flops": total_flops,
-            "flops_giga": total_flops / 1e9
-        }
-
-    except Exception as e:
-        print(f"FLOPs計算中にエラーが発生しました: {e}")
-        return {
-            "param_count": param_count,
-            "total_flops": None,
-            "flops_giga": None
-        }
-
-
-# --- 疑似データ生成コード ---
-@logger.catch
-def generate_dummy_data(batch_size, num_frames, height, width, num_classes):
-    """
-    疑似動画行動分離データを生成する関数
-
-    Args:
-        batch_size (int): バッチサイズ
-        num_frames (int): 1つの動画クリップのフレーム数 (Depth)
-        height (int): フレームの高さ
-        width (int): フレームの幅
-        num_classes (int): クラス数
-
-    Returns:
-        tuple: (疑似入力データ tensor, 疑似ラベル tensor)
-    """
-    # 入力データの形状: (batch_size, channels=3, num_frames, height, width)
-    # channels=3はRGBを想定
-    dummy_input = torch.randn(batch_size, 3, num_frames, height, width)
-
-    # ラベルの形状: (batch_size,) - クラスID (0 から num_classes-1)
-    # 分類問題なので、ターゲットはクラスIDとなります
-    dummy_labels = torch.randint(0, num_classes, (batch_size,))
-
-    return dummy_input, dummy_labels
-
-
 # モデルのパラメータ設定
 INPUT_FRAMES = 5
 IMAGE_HEIGHT = 120  # 例として適切なサイズを設定
@@ -244,6 +162,87 @@ def train():
         print("モデルにONNXエクスポートに対応していない演算が含まれている可能性があります。")
         print("または、ONNX opsetバージョンが適切でない可能性があります。")
         print("詳細については、PyTorchのONNXエクスポートのドキュメントを参照してください。")
+
+
+# --- モデル情報の出力機能 ---
+@logger.catch
+def print_model_info(model, input_shape, model_class_name):
+    """
+    モデルのパラメータ数とFLOPsを計算して表示する関数
+
+    Args:
+        model: 分析するモデル
+        input_shape: 入力テンソルの形状 (batch_size, channels, frames, height, width)
+    """
+    # パラメータ数を計算
+    param_count = sum(p.numel() for p in model.parameters())
+    print(f"モデルパラメータ数: {param_count:,}")
+
+    # 演算量(FLOPs)を計算
+    dummy_input = torch.rand(input_shape)
+    dummy_input = dummy_input.to(next(model.parameters()).device)
+
+    try:
+        flops = FlopCountAnalysis(model, dummy_input)
+        flops_table = flop_count_table(flops)
+        total_flops = flops.total()
+
+        print("--- モデル演算量(FLOPs)の詳細 ---")
+        print(flops_table)
+        print(f"総演算量: {total_flops / 1e9:.2f} GFLOPs")
+
+        # 結果をファイルに保存
+        os.makedirs("model_analysis", exist_ok=True)
+        with open(f"model_analysis/{model_class_name}_info.txt", "w") as f:
+            f.write(f"モデル名: {model_class_name}\n")
+            f.write(f"パラメータ数: {param_count:,}\n")
+            f.write(f"入力形状: {input_shape}\n")
+            f.write(f"総演算量: {total_flops / 1e9:.2f} GFLOPs\n\n")
+            f.write("--- 演算量の詳細 ---\n")
+            f.write(flops_table)
+
+        print(f"モデル情報を model_analysis/{model_class_name}_info.txt に保存しました")
+
+        return {
+            "param_count": param_count,
+            "total_flops": total_flops,
+            "flops_giga": total_flops / 1e9
+        }
+
+    except Exception as e:
+        print(f"FLOPs計算中にエラーが発生しました: {e}")
+        return {
+            "param_count": param_count,
+            "total_flops": None,
+            "flops_giga": None
+        }
+
+
+# --- 疑似データ生成コード ---
+@logger.catch
+def generate_dummy_data(batch_size, num_frames, height, width, num_classes):
+    """
+    疑似動画行動分離データを生成する関数
+
+    Args:
+        batch_size (int): バッチサイズ
+        num_frames (int): 1つの動画クリップのフレーム数 (Depth)
+        height (int): フレームの高さ
+        width (int): フレームの幅
+        num_classes (int): クラス数
+
+    Returns:
+        tuple: (疑似入力データ tensor, 疑似ラベル tensor)
+    """
+    # 入力データの形状: (batch_size, channels=3, num_frames, height, width)
+    # channels=3はRGBを想定
+    dummy_input = torch.randn(batch_size, 3, num_frames, height, width)
+
+    # ラベルの形状: (batch_size,) - クラスID (0 から num_classes-1)
+    # 分類問題なので、ターゲットはクラスIDとなります
+    dummy_labels = torch.randint(0, num_classes, (batch_size,))
+
+    return dummy_input, dummy_labels
 
 
 if __name__ == "__main__":
