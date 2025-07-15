@@ -22,6 +22,7 @@ from model import (
     I3DWithMobileAttention,
     I3DWithPoolFormer
 )
+from advanced_models import ConvNeXt3DTiny, MobileNetV2_3D, ViViTTiny
 from uniformerv2_model import uniformerv2_tiny, uniformerv2_nano
 
 # モデルのパラメータ設定
@@ -45,7 +46,7 @@ def train():
         )
         model_class_name = "uniformerv2_tiny"
     else:
-        model = CNN3D(in_channels=3, num_classes=NUM_CLASSES)
+        model = ConvNeXt3DTiny(in_channels=3, num_classes=NUM_CLASSES)
         model_class_name = model.__class__.__name__.lower()
 
     # 損失関数とオプティマイザ
