@@ -2,6 +2,8 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
+from layer import MobileAttention3D
+
 
 class ConvNeXt3DBlock(nn.Module):
     """Minimal 3D ConvNeXt block with depthwise 3D convolution."""
@@ -151,3 +153,57 @@ class ViViTTiny(nn.Module):
         x = self.transformer(x)
         x = x.mean(dim=1)
         return self.fc(x)
+
+
+class MobileNetV4Block3D(nn.Module):
+    """MobileNetV4-like block with optional attention for 3D inputs."""
+
+    def __init__(self, inp: int, oup: int, stride, expand_ratio: float, use_attention: bool = False):
+        super().__init__()
+        self.use_attention = use_attention
+        self.mbconv = InvertedResidual3D(inp, oup, stride, expand_ratio)
+        self.attn = MobileAttention3D(oup, num_heads=4, key_dim=oup // 4, value_dim=oup // 4) if use_attention else nn.Identity()
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        x = self.mbconv(x)
+        x = self.attn(x)
+        return x
+
+
+class MobileNetV4_3D(nn.Module):
+    """Simplified MobileNetV4 adapted for 5-frame video classification."""
+
+    def __init__(self, in_channels: int = 3, num_classes: int = 7, width_mult: float = 0.5):
+        super().__init__()
+        cfgs = [
+            # t, c, n, s, attn
+            [1, 16, 1, (1, 1, 1), False],
+            [4, 24, 2, (1, 2, 2), False],
+            [4, 40, 2, (2, 2, 2), True],
+            [4, 80, 3, (2, 2, 2), False],
+            [4, 112, 3, (1, 1, 1), True],
+            [4, 160, 2, (2, 2, 2), False],
+            [4, 320, 1, (1, 1, 1), True],
+        ]
+        input_channel = int(32 * width_mult)
+        layers = [
+            nn.Conv3d(in_channels, input_channel, kernel_size=3, stride=(1, 2, 2), padding=1, bias=False),
+            nn.BatchNorm3d(input_channel),
+            nn.SiLU(inplace=True),
+        ]
+        for t, c, n, s, attn in cfgs:
+            output_channel = int(c * width_mult)
+            for i in range(n):
+                stride = s if i == 0 else (1, 1, 1)
+                use_attn = attn and i == n - 1
+                layers.append(MobileNetV4Block3D(input_channel, output_channel, stride, expand_ratio=t, use_attention=use_attn))
+                input_channel = output_channel
+        self.features = nn.Sequential(*layers)
+        self.pool = nn.AdaptiveAvgPool3d(1)
+        self.classifier = nn.Linear(input_channel, num_classes)
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        x = self.features(x)
+        x = self.pool(x)
+        x = torch.flatten(x, 1)
+        return self.classifier(x)
